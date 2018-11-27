@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>OS Open Zoom Stack</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
+
+
+
+<style>
+    #menu {
+        position: absolute;
+        background: #fff;
+        padding: 10px;
+        font-family: 'Open Sans', sans-serif;
+    }
+</style>
+
+
+
+<div id='map'></div>
+<div id='menu'>
+
+	<h1>OS Open Zoom Stack</h1>
+    <input id='outdoor' type='radio' name='rtoggle' value='outdoor' checked='checked'>
+    <label for='outdoor'>Outdoor</label>
+    <input id='road' type='radio' name='rtoggle' value='road'>
+    <label for='road'>Road</label>
+    <input id='light' type='radio' name='rtoggle' value='light'>
+    <label for='Light'>Light</label>
+    <input id='night' type='radio' name='rtoggle' value='night'>
+    <label for='light'>Night</label>
+</div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoid2FyZHJvcGVyMSIsImEiOiJLcDZNZjM4In0.BRP33oIbUWHpCyqMv9ecfQ';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'https://s3-eu-west-1.amazonaws.com/tiles.os.uk/styles/open-zoomstack-outdoor/style.json',
+    zoom: 10,
+    center: [-1.485, 52.567]
+});
+
+
+
+var layerList = document.getElementById('menu');
+var inputs = layerList.getElementsByTagName('input');
+
+function switchLayer(layer) {
+    var layerId = layer.target.id;
+    map.setStyle('https://s3-eu-west-1.amazonaws.com/tiles.os.uk/styles/open-zoomstack-' + layerId + '/style.json');
+}
+
+for (var i = 0; i < inputs.length; i++) {
+    inputs[i].onclick = switchLayer;
+}
+
+map.addControl(new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken
+}));
+
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+
+</script>
+
+</body>
+</html>
